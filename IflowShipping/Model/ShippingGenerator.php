@@ -348,50 +348,43 @@ class ShippingGenerator
                 $labelsContent[] = $inf['label_content'];
                 if(!empty($inf['description'])) {
                     $tracking_info = array(
-                        'tracking_number' => $inf['tracking_number'],
-                        'description' => $inf['description'],
+                        'carrier_code' => \Iflow\IflowShipping\Helper\Data::CARRIER_COODE,
+                        'title' => $this->_scopeConfig->getValue(
+                            'carriers/' . \Iflow\IflowShipping\Helper\Data::CARRIER_COODE . '/title',
+                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                            $shipment->getStoreId()
+                        ),
+                        'number' => $inf['tracking_number'],
+                        'carrier' => \Iflow\IflowShipping\Helper\Data::CARRIER_COODE,
                     );
+                    $shipment->setShippingLabel($inf['description']);
                     $trackingNumbers[] = $tracking_info;
 
                 }
             }
         }
-        $outputPdf = $this->_labelGenerator->combineLabelsPdf($labelsContent);
-        $shipment->setShippingLabel($outputPdf->render());
-        $carrierCode = $carrier->getCarrierCode();
-        $carrierTitle = $this->_scopeConfig->getValue(
-            'carriers/' . $carrierCode . '/title',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $shipment->getStoreId()
-        );
+
+
         if (!empty($trackingNumbers)) {
-            $this->addTrackingNumbersToShipmentWithDesc($shipment, $trackingNumbers, $carrierCode, $carrierTitle);
+            $this->addTrackingNumbersToShipmentWithDesc($shipment, $trackingNumbers);
         }
+
     }
 
     /**
      * @param \Magento\Sales\Model\Order\Shipment $shipment
-     * @param array $trackingNumbers
-     * @param string $carrierCode
-     * @param string $carrierTitle
-     *
-     * @return void
+     * @param $trackingNumbers
      */
     private function addTrackingNumbersToShipmentWithDesc(
         \Magento\Sales\Model\Order\Shipment $shipment,
-        $trackingNumbers,
-        $carrierCode,
-        $carrierTitle
+        $trackingNumbers
     ) {
         foreach ($trackingNumbers as $inf) {
 
             $shipment->addTrack(
-                $this->_trackFactory->create()
-                    ->setNumber($inf['tracking_number'])
-                    ->setCarrierCode($carrierCode)
-                    ->setDescription($inf['tracking_number'])
-                    ->setTitle($carrierTitle)
+                $this->_trackFactory->create()->addData($inf)
             );
         }
+        $shipment->save();
     }
 }

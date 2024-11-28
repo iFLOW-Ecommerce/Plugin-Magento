@@ -60,7 +60,7 @@ class Carrier extends AbstractCarrier implements CarrierInterface
     protected $customerSession;
 
     /**
-     * @var \Magento\Catalog\Model\Product 
+     * @var \Magento\Catalog\Model\Product
      */
     protected $productModel;
 
@@ -159,7 +159,7 @@ class Carrier extends AbstractCarrier implements CarrierInterface
                 $province = $shippingAddress->getRegionCode();
             }
         }
-        
+
         $zip = $request->getDestPostcode();
         $shipment_data = array(
             'zip_code' => $zip,
@@ -178,7 +178,7 @@ class Carrier extends AbstractCarrier implements CarrierInterface
         if(isset($price_result["code"]) && $price_result["code"] == 500){
             if ($this->iflowHelper->showMethodOnError()) {
                 $error = $this->_rateErrorFactory->create();
-                $error->setCarrier($this->_code);
+                $error->setCarrier(\Iflow\IflowShipping\Helper\Data::CARRIER_COODE);
                 $error->setCarrierTitle($this->iflowHelper->getTitle());
                 $error->setErrorMessage(__('No existen cotizaciones para el código postal ingresado.'));
                 return $error;
@@ -192,18 +192,18 @@ class Carrier extends AbstractCarrier implements CarrierInterface
                 $shippingPrice = $price_result["results"]["final_value"];
             }
         }
-        
+
         if($request->getFreeShipping()){
             $shippingPrice = 0;
             $this->logInCustomFile("Is free shipping");
         }
-        
+
         $result = $this->_rateFactory->create();
         /** @var \Magento\Quote\Model\Quote\Address\RateResult\Method $method */
         $method = $this->_rateMethodFactory->create();
-        $method->setCarrier($this->_code);
+        $method->setCarrier(\Iflow\IflowShipping\Helper\Data::CARRIER_COODE);
         $method->setCarrierTitle($this->iflowHelper->getTitle());
-        $method->setMethod($this->_code);
+        $method->setMethod(\Iflow\IflowShipping\Helper\Data::CARRIER_COODE);
         $method->setMethodTitle($this->iflowHelper->getName());
         $method->setPrice($shippingPrice);
         $method->setCost($shippingPrice);
@@ -285,7 +285,7 @@ class Carrier extends AbstractCarrier implements CarrierInterface
             $items = $package['items'];
             foreach ($items as $itemid => $item) {
                 $this->logInCustomFile("WEIGHT: ".($item['weight']*1000));
-                $items[$itemid]['weight'] = $item['weight']*1000;                      
+                $items[$itemid]['weight'] = $item['weight']*1000;
             }
             $this->logInCustomFile("ITEMS: ".print_r($package['items'],true));
             $request->setPackageItems($items);
@@ -384,7 +384,7 @@ class Carrier extends AbstractCarrier implements CarrierInterface
             } catch (Exception $e) {
                 $this->logInCustomFile('API response parsing error: ' . $e->getMessage());
             }
-            
+
             return new \Magento\Framework\DataObject([
                 'tracking_number' => $trackingNumber,
                 'label_content' => $labelContent,
@@ -402,7 +402,7 @@ class Carrier extends AbstractCarrier implements CarrierInterface
         $response = curl_exec($ch);
         $cinfo = curl_getinfo($ch);
         $error = false;
-        
+
         if ($response === false) {
             $error = "No cURL data returned for $url [". $cinfo['http_code']. "]";
             if (curl_error($ch)) {
@@ -423,7 +423,7 @@ class Carrier extends AbstractCarrier implements CarrierInterface
         }
         return $result;
     }
-    
+
     /**
      * Form Object with appropriate structure for shipment request
      *
@@ -467,19 +467,19 @@ class Carrier extends AbstractCarrier implements CarrierInterface
         foreach ($packageItems as $itemShipment) {
             $reqItem = new \Magento\Framework\DataObject();
             $reqItem->setData($itemShipment);
-            
+
             $item = new \stdClass;
-                
+
             $item->productId = $reqItem->getProductId();
             $product = $this->productModel->load($reqItem->getProductId());
             if($product->getTypeId() == "configurable") {
 
-                
+
                 $_children = $product->getTypeInstance()->getUsedProducts($product);
                 foreach ($_children as $child){
                     $this->logInCustomFile("Here are your child Product Ids ".$child->getID()."\n");
                     $product = $this->productModel->load($child->getID());
-            
+
                     $item->height = $product->getTsDimensionsHeight();
                     $item->width = $product->getTsDimensionsWidth();
                     $item->length = $product->getTsDimensionsLength();
@@ -502,7 +502,7 @@ class Carrier extends AbstractCarrier implements CarrierInterface
             $item->price = $reqItem->getPrice();
             $payload->items[] = $item;
         }
-    
+
         $this->logInCustomFile('Request data: ' . json_encode($payload));
 
         return $payload;
@@ -633,7 +633,7 @@ class Carrier extends AbstractCarrier implements CarrierInterface
         $this->logInCustomFile('proccessAdditionalValidation call');
         return $this;
     }
-    
+
     private function logInCustomFile($msge){
         if($this->debugEnable) {
             \Iflow\IflowShipping\Helper\Data::log($msge);

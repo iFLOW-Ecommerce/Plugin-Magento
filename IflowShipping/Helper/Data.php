@@ -15,7 +15,7 @@ class Data extends AbstractHelper
     const CARRIER_SECTION = 'carriers/iflow/';
     const SHIPPING_SECTION_CREDENTIALS = 'shipping/iflow/credentials/';
     const SHIPPING_SECTION_MAPPING= 'shipping/iflow/attributes_mapping/';
-
+    const CARRIER_COODE ='iflow';
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
      */
@@ -113,10 +113,10 @@ class Data extends AbstractHelper
         }
 
         if($result['calle'] == ''){
-            $result['calle'] = $shippingAddress->getStreetLine(1);
+            $result['calle'] = $shippingAddress->getStreetLine(1)?:" ";
         }
         if($result['numero'] == ''){
-            $result['numero'] = $shippingAddress->getStreetLine(2);
+            $result['numero'] = $shippingAddress->getStreetLine(2)?:" ";
         }
 
         return $result;
@@ -165,9 +165,10 @@ class Data extends AbstractHelper
 
     public static function log($message, $fileName = 'iflow_shipping.log')
     {
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/' . $fileName);
-        $logger = new \Zend\Log\Logger();
+        $writer = new \Zend_Log_Writer_Stream(BP . '/var/log/' . $fileName);
+        $logger = new \Zend_Log();
         $logger->addWriter($writer);
         $logger->info($message);
     }
 }
+

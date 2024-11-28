@@ -39,7 +39,7 @@ class FilterGridCollection
                 array('shipping_label')
             );
 
-            $select->where('ss.shipping_label IS NULL');
+
 
             $collection->addFilterToMap('entity_id','main_table.entity_id');
         }
