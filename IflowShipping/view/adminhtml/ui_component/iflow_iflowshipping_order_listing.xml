@@ -209,7 +209,7 @@
                 <visible>false</visible>
             </settings>
         </column>
-        <actionsColumn name="actions" class="Magento\Sales\Ui\Component\Listing\Column\ViewAction">
+        <actionsColumn name="actions" class="Iflow\IflowShipping\Ui\Component\Listing\Columns\IflowActions">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="viewUrlPath" xsi:type="string">sales/order/view</item>
