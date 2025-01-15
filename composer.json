@@ -1,0 +1,20 @@
+{
+  "name": "ids/iflowecommerce",
+  "description": "Módulo de envíos Iflow para Magento 2",
+  "type": "magento2-module",
+  "version": "1.0.18",
+  "require": {
+    "spipu/html2pdf": "^5.2"
+  },
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-0": {
+      "iflow": "src"
+    },
+    "psr-4": {
+      "Ids\\iflowsa\\": ""
+    }
+  }
+}
