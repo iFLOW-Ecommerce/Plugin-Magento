@@ -1,16 +1,19 @@
 Módulo de envíos Iflow 2
-Requisitos
+* Requisitos
 Para el correcto funcionamiento del módulo es necesario contar con:
 
 Magento version >= 2.1.2 y < 2.2 
 
-Instalación
+* Instalacion manual descargando el modulo:
+descargue desde  : https://github.com/iFLOW-Ecommerce/Plugin-Magento.git
+
+ * Instalación con composer
 Para concretar la instalacion del módulo es necesario realizar los siguientes pasos. Primeramente, parados en la carpeta root del proyecto añadimos el modulo a nuestro composer.json ejecutando:
 
 composer require "iflow/IflowShipping":"@dev"
 Nos instalará la última versión del modulo.
 
-Una vez actualizado nuestro repositorio composer, procedemos a activar el modulo en magento:
+* Una vez actualizado nuestro repositorio composer, procedemos a activar el modulo en magento:
 
 1. php bin/magento module:enable Ids_Andreani --clear-static-content
 2. php bin/magento setup:upgrade
