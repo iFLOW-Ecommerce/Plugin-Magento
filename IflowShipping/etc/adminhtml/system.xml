@@ -21,6 +21,11 @@
                 <field id="name" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Method Name</label>
                 </field>
+                <field id="iflow_free_shipping" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Envios sin cargo a partir de </label>
+                    <comment>Ingrese un importe en caso de querer bonificar el envio. De lo contrario, usar las reglas nativas.</comment>
+                    <validate>validate-number validate-zero-or-greater</validate>
+                </field>
                 <field id="price" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Shipping Cost</label>
                     <validate>validate-number validate-zero-or-greater</validate>

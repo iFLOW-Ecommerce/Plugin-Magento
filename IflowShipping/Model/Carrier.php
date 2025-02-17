@@ -197,7 +197,9 @@ class Carrier extends AbstractCarrier implements CarrierInterface
             $shippingPrice = 0;
             $this->logInCustomFile("Is free shipping");
         }
-
+        if((int)$this->iflowHelper->getFreeShippingAmount()>0 && $this->iflowHelper->getFreeShippingAmount() < $request->getData('base_subtotal_incl_tax')){
+            $shippingPrice = 0;
+        }
         $result = $this->_rateFactory->create();
         /** @var \Magento\Quote\Model\Quote\Address\RateResult\Method $method */
         $method = $this->_rateMethodFactory->create();
