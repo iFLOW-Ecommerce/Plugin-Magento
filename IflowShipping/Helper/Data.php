@@ -15,6 +15,7 @@ class Data extends AbstractHelper
     const CARRIER_SECTION = 'carriers/iflow/';
     const SHIPPING_SECTION_CREDENTIALS = 'shipping/iflow/credentials/';
     const SHIPPING_SECTION_MAPPING= 'shipping/iflow/attributes_mapping/';
+    const SHIPPING_FREE_SHIPPING='shipping/iflow/iflow_free_shipping';
     const CARRIER_COODE ='iflow';
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
@@ -42,6 +43,10 @@ class Data extends AbstractHelper
 
     public function getFixedPrice(){
         return $this->getConfigData(self::CARRIER_SECTION . 'price');
+    }
+
+    public function getFreeShippingAmount(){
+        return $this->getConfigData(self::CARRIER_SECTION . 'iflow_free_shipping');
     }
 
     public function getTitle(){
